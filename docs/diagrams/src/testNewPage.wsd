@@ -1,0 +1,11 @@
+@startuml test multipage
+title Test plusieurs pages
+Alice-> Bob : message 1
+Alice-> Bob : message 2
+newpage titre de la deuxième page
+Alice-> Bob : message 3
+Alice-> Bob : message 4
+newpage dernière page
+Alice-> Bob : message 5
+Alice-> Bob : message 6
+@enduml

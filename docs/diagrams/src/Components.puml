@@ -1,0 +1,36 @@
+@startuml(id=Components)
+!includeurl https://raw.githubusercontent.com/plantuml-stdlib/C4-PlantUML/master/C4.puml
+!includeurl https://raw.githubusercontent.com/plantuml-stdlib/C4-PlantUML/master/C4_Context.puml
+!includeurl https://raw.githubusercontent.com/plantuml-stdlib/C4-PlantUML/master/C4_Container.puml
+!includeurl https://raw.githubusercontent.com/plantuml-stdlib/C4-PlantUML/master/C4_Component.puml
+LAYOUT_WITH_LEGEND()
+
+title Internet Banking System - API Application - Components
+
+Container(18, "Database", "Oracle Database Schema", "Stores user registration information, hashed authentication credentials, access logs, etc.")
+System(5, "E-mail System", "The internal Microsoft Exchange e-mail system.")
+System(4, "Mainframe Banking System", "Stores all of the core banking information about customers, accounts, transactions, etc.")
+Container(9, "Mobile App", "Xamarin", "Provides a limited subset of the Internet banking functionality to customers via their mobile device.")
+Container(8, "Single-Page Application", "JavaScript and Angular", "Provides all of the Internet banking functionality to customers via their web browser.")
+Container_Boundary(11_boundary, API Application) {
+  Component(13, "Accounts Summary Controller", "Spring MVC Rest Controller", "Provides customers with a summary of their bank accounts.")
+  Component(17, "E-mail Component", "Spring Bean", "Sends e-mails to users.")
+  Component(16, "Mainframe Banking System Facade", "Spring Bean", "A facade onto the mainframe banking system.")
+  Component(14, "Reset Password Controller", "Spring MVC Rest Controller", "Allows users to reset their passwords with a single use URL.")
+  Component(15, "Security Component", "Spring Bean", "Provides functionality related to signing in, changing passwords, etc.")
+  Component(12, "Sign In Controller", "Spring MVC Rest Controller", "Allows users to sign in to the Internet Banking System.")
+}
+Rel_D(13, 16, "Uses", "")
+Rel_D(17, 5, "Sends e-mail using", "")
+Rel_D(16, 4, "Makes API calls to", "XML/HTTPS")
+Rel_D(9, 13, "Makes API calls to", "JSON/HTTPS")
+Rel_D(9, 14, "Makes API calls to", "JSON/HTTPS")
+Rel_D(9, 12, "Makes API calls to", "JSON/HTTPS")
+Rel_D(14, 17, "Uses", "")
+Rel_D(14, 15, "Uses", "")
+Rel_D(15, 18, "Reads from and writes to", "JDBC")
+Rel_D(12, 15, "Uses", "")
+Rel_D(8, 13, "Makes API calls to", "JSON/HTTPS")
+Rel_D(8, 14, "Makes API calls to", "JSON/HTTPS")
+Rel_D(8, 12, "Makes API calls to", "JSON/HTTPS")
+@enduml

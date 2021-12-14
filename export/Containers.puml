@@ -1,0 +1,30 @@
+@startuml(id=Containers)
+!includeurl https://raw.githubusercontent.com/plantuml-stdlib/C4-PlantUML/master/C4.puml
+!includeurl https://raw.githubusercontent.com/plantuml-stdlib/C4-PlantUML/master/C4_Context.puml
+!includeurl https://raw.githubusercontent.com/plantuml-stdlib/C4-PlantUML/master/C4_Container.puml
+!includeurl https://raw.githubusercontent.com/plantuml-stdlib/C4-PlantUML/master/C4_Component.puml
+LAYOUT_WITH_LEGEND()
+
+title Internet Banking System - Containers
+
+System(5, "E-mail System", "The internal Microsoft Exchange e-mail system.")
+System(4, "Mainframe Banking System", "Stores all of the core banking information about customers, accounts, transactions, etc.")
+Person_Ext(1, "Personal Banking Customer", "A customer of the bank, with personal bank accounts.")
+System_Boundary(7_boundary, Internet Banking System) {
+  Container(11, "API Application", "Java and Spring MVC", "Provides Internet banking functionality via a JSON/HTTPS API.")
+  Container(18, "Database", "Oracle Database Schema", "Stores user registration information, hashed authentication credentials, access logs, etc.")
+  Container(9, "Mobile App", "Xamarin", "Provides a limited subset of the Internet banking functionality to customers via their mobile device.")
+  Container(8, "Single-Page Application", "JavaScript and Angular", "Provides all of the Internet banking functionality to customers via their web browser.")
+  Container(10, "Web Application", "Java and Spring MVC", "Delivers the static content and the Internet banking single page application.")
+}
+Rel_D(11, 18, "Reads from and writes to", "JDBC")
+Rel_D(11, 5, "Sends e-mail using", "")
+Rel_D(11, 4, "Makes API calls to", "XML/HTTPS")
+Rel_D(5, 1, "Sends e-mails to", "")
+Rel_D(9, 11, "Makes API calls to", "JSON/HTTPS")
+Rel_D(1, 9, "Views account balances, and makes payments using", "")
+Rel_D(1, 8, "Views account balances, and makes payments using", "")
+Rel_D(1, 10, "Visits bigbank.com/ib using", "HTTPS")
+Rel_D(8, 11, "Makes API calls to", "JSON/HTTPS")
+Rel_D(10, 8, "Delivers to the customer's web browser", "")
+@enduml

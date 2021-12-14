@@ -1,0 +1,50 @@
+@startuml(id=LiveDeployment)
+!includeurl https://raw.githubusercontent.com/plantuml-stdlib/C4-PlantUML/master/C4.puml
+!includeurl https://raw.githubusercontent.com/plantuml-stdlib/C4-PlantUML/master/C4_Context.puml
+!includeurl https://raw.githubusercontent.com/plantuml-stdlib/C4-PlantUML/master/C4_Container.puml
+!includeurl https://raw.githubusercontent.com/plantuml-stdlib/C4-PlantUML/master/C4_Component.puml
+LAYOUT_WITH_LEGEND()
+
+title Internet Banking System - Deployment - Live
+
+node "Big Bank plc" <<Deployment Node: Big Bank plc data center>> as 72 {
+  node "bigbank-api*** (x8)" <<Deployment Node: Ubuntu 16.04 LTS>> as 77 {
+    node "Apache Tomcat" <<Deployment Node: Apache Tomcat 8.x>> as 78 {
+      Container(79, "API Application", "Java and Spring MVC", "Provides Internet banking functionality via a JSON/HTTPS API.")
+    }
+  }
+  node "bigbank-db01" <<Deployment Node: Ubuntu 16.04 LTS>> as 82 {
+    node "Oracle - Primary" <<Deployment Node: Oracle 12c>> as 83 {
+      Container(84, "Database", "Oracle Database Schema", "Stores user registration information, hashed authentication credentials, access logs, etc.")
+    }
+  }
+  node "bigbank-db02" <<Deployment Node: Ubuntu 16.04 LTS>> as 86 {
+    node "Oracle - Secondary" <<Deployment Node: Oracle 12c>> as 87 {
+      Container(88, "Database", "Oracle Database Schema", "Stores user registration information, hashed authentication credentials, access logs, etc.")
+    }
+  }
+  node "bigbank-prod001" <<Deployment Node>> as 90 {
+    System(91, "Mainframe Banking System", "Stores all of the core banking information about customers, accounts, transactions, etc.")
+  }
+  node "bigbank-web*** (x4)" <<Deployment Node: Ubuntu 16.04 LTS>> as 73 {
+    node "Apache Tomcat" <<Deployment Node: Apache Tomcat 8.x>> as 74 {
+      Container(75, "Web Application", "Java and Spring MVC", "Delivers the static content and the Internet banking single page application.")
+    }
+  }
+}
+node "Customer's computer" <<Deployment Node: Microsoft Windows or Apple macOS>> as 69 {
+  node "Web Browser" <<Deployment Node: Chrome, Firefox, Safari, or Edge>> as 70 {
+    Container(71, "Single-Page Application", "JavaScript and Angular", "Provides all of the Internet banking functionality to customers via their web browser.")
+  }
+}
+node "Customer's mobile device" <<Deployment Node: Apple iOS or Android>> as 67 {
+  Container(68, "Mobile App", "Xamarin", "Provides a limited subset of the Internet banking functionality to customers via their mobile device.")
+}
+Rel_D(79, 84, "Reads from and writes to", "JDBC")
+Rel_D(79, 88, "Reads from and writes to", "JDBC")
+Rel_D(79, 91, "Makes API calls to", "XML/HTTPS")
+Rel_D(68, 79, "Makes API calls to", "JSON/HTTPS")
+Rel_D(83, 87, "Replicates data to", "")
+Rel_D(71, 79, "Makes API calls to", "JSON/HTTPS")
+Rel_D(75, 71, "Delivers to the customer's web browser", "")
+@enduml

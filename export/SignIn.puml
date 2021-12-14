@@ -1,0 +1,21 @@
+@startuml(id=SignIn)
+!includeurl https://raw.githubusercontent.com/plantuml-stdlib/C4-PlantUML/master/C4.puml
+!includeurl https://raw.githubusercontent.com/plantuml-stdlib/C4-PlantUML/master/C4_Context.puml
+!includeurl https://raw.githubusercontent.com/plantuml-stdlib/C4-PlantUML/master/C4_Container.puml
+!includeurl https://raw.githubusercontent.com/plantuml-stdlib/C4-PlantUML/master/C4_Component.puml
+LAYOUT_WITH_LEGEND()
+
+title API Application - Dynamic
+caption Summarises how the sign in feature works in the single-page application.
+
+Container(8, "Single-Page Application", "JavaScript and Angular", "Provides all of the Internet banking functionality to customers via their web browser.")
+Component(12, "Sign In Controller", "Spring MVC Rest Controller", "Allows users to sign in to the Internet Banking System.")
+Component(15, "Security Component", "Spring Bean", "Provides functionality related to signing in, changing passwords, etc.")
+Container(18, "Database", "Oracle Database Schema", "Stores user registration information, hashed authentication credentials, access logs, etc.")
+8 -[#707070]> 12 : 1. Submits credentials to
+12 -[#707070]> 15 : 2. Validates credentials using
+15 -[#707070]> 18 : 3. select * from users where username = ?
+18 -[#707070]-> 15 : 4. Returns user data to
+15 -[#707070]-> 12 : 5. Returns true if the hashed password matches
+12 -[#707070]-> 8 : 6. Sends back an authentication token to
+@enduml

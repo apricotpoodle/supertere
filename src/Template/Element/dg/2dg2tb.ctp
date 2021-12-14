@@ -1,0 +1,40 @@
+<?php
+/*
+ * Société  Éditrice du Monde.
+ * Service Étude et Développement.
+ * 80 Boulevard Blanqui 75013 Paris
+ */
+
+/**
+ * Syntaxe pour appeler cet élément :
+ * https://book.cakephp.org/3.0/en/views.html#passing-variables-into-an-element
+ * You can pass data to an element through the element’s second argument:
+ *
+ * echo $this->element('helpbox', [
+ *     "helptext" => "Oh, this text is very helpful."
+ * ]);
+ * Inside the element file, all the passed variables are available as members
+ *  of the parameter array. In the above example,
+ * the src/Template/Element/helpbox.ctp file can use the $helptext variable:
+ *
+ * // Inside src/Template/Element/helpbox.ctp
+ * echo $helptext; // Outputs "Oh, this text is very helpful."
+ * Keep in mind that in those view vars are merged with the view vars
+ * from the view itself. So all view vars set using Controller::set()
+ * in the controller and View::set() in the view itself are also
+ * available inside the element.
+ */
+?>
+<div class="row">
+    <div class="col-sm-5" >
+        <?= $this->element($eltToolBarGauche); ?>
+        <?= $this->element($eltDataGridGauche); ?>
+    </div>
+    <!--div class="col-sm-1" style="background-color:lavenderblush;">
+        <p>Actions à venir…</p>
+    </div-->
+    <div class="col-sm-7" >
+        <?= $this->element($eltToolBar); ?>
+        <?= $this->element($eltDataGrid); ?>
+    </div>
+</div>

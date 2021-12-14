@@ -1,0 +1,35 @@
+@startuml(id=DevelopmentDeployment)
+!includeurl https://raw.githubusercontent.com/plantuml-stdlib/C4-PlantUML/master/C4.puml
+!includeurl https://raw.githubusercontent.com/plantuml-stdlib/C4-PlantUML/master/C4_Context.puml
+!includeurl https://raw.githubusercontent.com/plantuml-stdlib/C4-PlantUML/master/C4_Container.puml
+!includeurl https://raw.githubusercontent.com/plantuml-stdlib/C4-PlantUML/master/C4_Component.puml
+LAYOUT_WITH_LEGEND()
+
+title Internet Banking System - Deployment - Development
+
+node "Big Bank plc" <<Deployment Node: Big Bank plc data center>> as 63 {
+  node "bigbank-dev001" <<Deployment Node>> as 64 {
+    System(65, "Mainframe Banking System", "Stores all of the core banking information about customers, accounts, transactions, etc.")
+  }
+}
+node "Developer Laptop" <<Deployment Node: Microsoft Windows 10 or Apple macOS>> as 50 {
+  node "Docker Container - Database Server" <<Deployment Node: Docker>> as 59 {
+    node "Database Server" <<Deployment Node: Oracle 12c>> as 60 {
+      Container(61, "Database", "Oracle Database Schema", "Stores user registration information, hashed authentication credentials, access logs, etc.")
+    }
+  }
+  node "Docker Container - Web Server" <<Deployment Node: Docker>> as 53 {
+    node "Apache Tomcat" <<Deployment Node: Apache Tomcat 8.x>> as 54 {
+      Container(57, "API Application", "Java and Spring MVC", "Provides Internet banking functionality via a JSON/HTTPS API.")
+      Container(55, "Web Application", "Java and Spring MVC", "Delivers the static content and the Internet banking single page application.")
+    }
+  }
+  node "Web Browser" <<Deployment Node: Chrome, Firefox, Safari, or Edge>> as 51 {
+    Container(52, "Single-Page Application", "JavaScript and Angular", "Provides all of the Internet banking functionality to customers via their web browser.")
+  }
+}
+Rel_D(57, 61, "Reads from and writes to", "JDBC")
+Rel_D(57, 65, "Makes API calls to", "XML/HTTPS")
+Rel_D(52, 57, "Makes API calls to", "JSON/HTTPS")
+Rel_D(55, 52, "Delivers to the customer's web browser", "")
+@enduml
